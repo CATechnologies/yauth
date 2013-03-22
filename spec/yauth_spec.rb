@@ -7,7 +7,7 @@ describe Yauth do
   it { should respond_to(:location=) }
 
   it "should store the default yml location" do
-    subject.location.should == "config/users.yml"    
+    subject.location.should == "tmp/config/users.yml"
   end
 
   it "should be possible to overwrite the default yml location" do
