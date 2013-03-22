@@ -20,7 +20,7 @@ class Yauth::User
   end
   
   def to_hash
-    { "user" => { "username" => username, "password" => password } }
+    { "user" => { "username" => username, "password" => password.to_s.force_encoding("UTF-8") } }
   end
 
   def to_yaml(opts={})

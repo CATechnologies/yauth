@@ -46,8 +46,9 @@ describe UserManager do
   end
 
   it "should save all its user to the specified file" do
-    first = User.new(:username => "first", :password => "123") 
-    second = User.new(:username => "second", :password => "456") 
+    first = User.new(:username => "first", :password => "123")
+    second = User.new(:username => "second")
+    second.plain_password = '456'
     subject.add(first)
     subject.add(second)
 
@@ -55,14 +56,14 @@ describe UserManager do
     io = StringIO.new
     subject.should_receive(:open).with(path, "w").and_yield(io)
     subject.save(path)
-    io.string.should == <<-EOF
+    io.string.should start_with <<-EOF.chop
 ---
 - user:
     username: first
     password: '123'
 - user:
     username: second
-    password: '456'
+    password: $2a$10$
 EOF
   end
 
