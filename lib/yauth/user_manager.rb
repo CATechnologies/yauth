@@ -1,3 +1,4 @@
+
 class Yauth::UserManager
   include Enumerable
 
@@ -37,7 +38,7 @@ class Yauth::UserManager
     manager = self.new
     return manager unless File.exists? path
     open(path) do |io|
-      YAML.load(io).each { |yauth_user| manager.add(yauth_user) }
+      YAML.load(io).each { |h| manager.add(Yauth::User.new(h)) }
     end
     manager
   end
