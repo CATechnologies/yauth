@@ -5,42 +5,46 @@ describe CLI do
 
   subject { CLI.new }
 
+  let(:options) { { :config => Yauth.location } }
+
   before :each do
-    FileUtils.stub!(:mkdir_p)
-    @options = {}
-    subject.stub!(:options).and_return(@options)
+    subject.stub!(:options).and_return(options)
   end
 
   [:add, :rm].each do |m|
     it { should respond_to(m) }
   end
 
-  it "should add a user to the manager with the specified config" do
-    @options[:config] = "config/users.yml"
-    manager = mock "Manager"
-    UserManager.should_receive(:load).with("config/users.yml").and_return(manager)
+  describe "#add" do
+    before :each do
+      UserManager.stub(:add)
+    end
 
-    user = mock "User"
-    User.should_receive(:new).and_return(user)
-    user.should_receive(:username=).with("bar")
-    user.should_receive(:plain_password=).with("foo")
+    it "should set the configured location" do
+      subject.should_receive(:set_location).with(Yauth.location)
+      subject.add("bar", "foo")
+    end
 
-    manager.should_receive(:add).with(user)
-
-    FileUtils.should_receive(:mkdir_p).with("config")
-    manager.should_receive(:save).with("config/users.yml")
-    subject.add("bar", "foo")
+    it "should delegate adding a user to the manager with the specified config" do
+      UserManager.should_receive(:add).with(instance_of(Pathname), "bar", "foo")
+      subject.add("bar", "foo")
+    end
   end
 
-  it "should remove from the manager with the specified config" do
-    @options[:config] = "config/users.yml"
-    manager = mock "Manager"
-    UserManager.should_receive(:load).with("config/users.yml").and_return(manager)
+  describe "#remove" do
+    before :each do
+      UserManager.stub(:remove)
+    end
 
-    manager.should_receive(:remove).with("bar")
+    it "should set the configured location" do
+      subject.should_receive(:set_location).with(Yauth.location)
+      subject.rm("bar")
+    end
 
-    FileUtils.should_receive(:mkdir_p).with("config")
-    manager.should_receive(:save).with("config/users.yml")
-    subject.rm("bar")
+    it "should delagate removing a user to the manager with the specified config" do
+      UserManager.should_receive(:remove).with(instance_of(Pathname), "bar")
+
+      subject.rm("bar")
+    end
   end
 end
