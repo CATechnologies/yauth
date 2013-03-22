@@ -1,7 +1,9 @@
 require File.join(File.dirname(__FILE__), "..", "spec_helper")
 
 describe UserManager do
-  subject { UserManager.new }
+  subject { UserManager.new(Yauth.location) }
+
+  let(:yml_location) { Pathname.new(Yauth.location) }
 
   [:add, :remove, :each, :save].each do |m|
     it do
@@ -45,17 +47,16 @@ describe UserManager do
     }.to yield_successive_args(first, second)
   end
 
-  it "should save all its user to the specified file" do
+  it "should save all its users to the specified file" do
     first = User.new(:username => "first", :password => "123")
     second = User.new(:username => "second")
     second.plain_password = '456'
     subject.add(first)
     subject.add(second)
 
-    path = "a/path/to.yml"
     io = StringIO.new
-    subject.should_receive(:open).with(path, "w").and_yield(io)
-    subject.save(path)
+    subject.should_receive(:open).with(yml_location, "w").and_yield(io)
+    subject.save
     io.string.should start_with <<-EOF.chop
 ---
 - user:
@@ -103,6 +104,8 @@ describe UserManager, "as a class" do
 
   subject { UserManager }
 
+  let(:base_path) { Pathname.pwd }
+
   it "should mix in Enumerable" do
     subject.ancestors.should include(Enumerable)
   end
@@ -140,4 +143,45 @@ describe UserManager, "as a class" do
       manager.to_a.should == []
     end
   end
+
+  it { should respond_to(:add) }
+  describe "#add" do
+    it "should add a user to the manager with the specified config" do
+      manager = mock "Manager"
+      UserManager.should_receive(:instance).with(base_path).and_return(manager)
+
+      user = mock "User"
+      User.should_receive(:new).and_return(user)
+      user.should_receive(:username=).with("bar")
+      user.should_receive(:plain_password=).with("foo")
+
+      manager.should_receive(:add).with(user)
+      manager.should_receive(:save)
+      subject.add(base_path, "bar", "foo")
+    end
+  end
+
+  it { should respond_to(:remove) }
+  describe "#remove" do
+    it "should remove from the manager with the specified config" do
+      manager = mock "Manager"
+
+      UserManager.should_receive(:instance).with(base_path).and_return(manager)
+      manager.should_receive(:remove).with("bar")
+      manager.should_receive(:save)
+
+      subject.remove(base_path, "bar")
+    end
+  end
+
+  it { should respond_to(:instance) }
+  describe "#instance" do
+    it "should return an instance of the manager with the specified base path" do
+      manager = mock "Manager"
+      UserManager.should_receive(:load).with(base_path + Yauth.location).and_return(manager)
+
+      subject.instance(base_path)
+    end
+  end
+
 end

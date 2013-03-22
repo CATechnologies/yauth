@@ -9,6 +9,9 @@ require 'stringio'
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
 include Yauth
+Yauth.location = "tmp/config/users.yml"
+
+ROOT = Pathname.new(File.dirname(__FILE__)) + "../"
 
 RSpec.configure do |config|
   

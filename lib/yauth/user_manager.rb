@@ -1,3 +1,4 @@
+require 'pathname'
 
 class Yauth::UserManager
   class Users < Array
@@ -8,8 +9,34 @@ class Yauth::UserManager
 
   include Enumerable
 
-  def initialize
+  attr_accessor :path
+
+  def initialize(path)
     @list = Users.new
+    @path = Pathname.new(path)
+    unless @path.exist?
+      @path.dirname.mkpath
+    end
+  end
+
+  def self.add(config_base_path, username, password)
+    #TODO: Move into user initializer
+    user = Yauth::User.new
+    user.username = username
+    user.plain_password = password
+    @manager = self.instance(config_base_path)
+    @manager.add(user)
+    @manager.save
+  end
+
+  def self.remove(config_base_path, username)
+    @manager = self.instance(config_base_path)
+    @manager.remove(username)
+    @manager.save
+  end
+
+  def self.instance(config_base_path)
+    @manager = Yauth::UserManager.load(config_base_path + Yauth.location)
   end
 
   def add(user)
@@ -25,8 +52,8 @@ class Yauth::UserManager
     @list.each(&block)
   end
 
-  def save(path)
-    open(path, "w") do |io|
+  def save
+    open(@path, "w") do |io|
       io << @list.to_yaml
     end
   end
@@ -41,7 +68,7 @@ class Yauth::UserManager
   end
 
   def self.load(path)
-    manager = self.new
+    manager = self.new(path)
     return manager unless File.exists? path
     open(path) do |io|
       YAML.load(io).each { |h| manager.add(Yauth::User.new(h)) }
