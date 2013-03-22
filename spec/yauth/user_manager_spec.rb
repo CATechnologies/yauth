@@ -56,13 +56,13 @@ describe UserManager do
     subject.should_receive(:open).with(path, "w").and_yield(io)
     subject.save(path)
     io.string.should == <<-EOF
---- 
-- user: 
+---
+- user:
     username: first
-    password: "123"
-- user: 
+    password: '123'
+- user:
     username: second
-    password: "456"
+    password: '456'
 EOF
   end
 

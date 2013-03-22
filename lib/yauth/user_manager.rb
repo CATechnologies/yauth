@@ -1,9 +1,15 @@
 
 class Yauth::UserManager
+  class Users < Array
+    def to_yaml
+      self.map(&:to_hash).to_yaml
+    end
+  end
+
   include Enumerable
 
   def initialize
-    @list = []
+    @list = Users.new
   end
 
   def add(user)
