@@ -34,8 +34,8 @@ describe User do
     subject.username = "XYZ"
     subject.password = "ABC"
     subject.to_yaml.should ==<<-EOF
---- 
-user: 
+---
+user:
   username: XYZ
   password: ABC
 EOF
