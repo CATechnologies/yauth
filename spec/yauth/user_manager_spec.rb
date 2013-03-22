@@ -38,10 +38,11 @@ describe UserManager do
   it "should yield each added user" do 
     first = mock_user "first"
     second = mock_user "second"
-    subject.should_receive(:each).and_yield(first, second)
-    subject.add first 
-    subject.add second 
-    subject.each {}
+    subject.add first
+    subject.add second
+    expect {|b|
+      subject.each(&b)
+    }.to yield_successive_args(first, second)
   end
 
   it "should save all its user to the specified file" do
