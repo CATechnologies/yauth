@@ -10,8 +10,8 @@ module Yauth
   Yauth.location = "config/users.yml"
 end
 
-require File.join(File.dirname(__FILE__), "yauth", "user")
-require File.join(File.dirname(__FILE__), "yauth", "user_manager")
-require File.join(File.dirname(__FILE__), "yauth", "cli")
-require File.join(File.dirname(__FILE__), "yauth", "strategy")
-require File.join(File.dirname(__FILE__), "yauth", "failure_app")
+require_relative "yauth/user"
+require_relative "yauth/user_manager"
+require_relative "yauth/cli"
+require_relative "yauth/strategy"
+require_relative "yauth/failure_app"
