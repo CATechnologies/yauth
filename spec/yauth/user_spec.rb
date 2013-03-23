@@ -70,25 +70,25 @@ EOF
   describe "as a class" do
 
     it "should build a user from a prefixed hash with strings" do
-      u = User.new({ "user" => { "username" => "XYZ", "password" => "ABC" } })
+      u = User.new({ "user" => { "username" => "XYZ", "password" => encrypt("ABC") } })
       u.username.should == "XYZ"
       u.password.should == "ABC"
     end
 
     it "should build a user from an prefixed hash with symbols" do
-      u = User.new({ :"user" => { :"username" => "XYZ", :"password" => "ABC" } })
+      u = User.new({ :"user" => { :"username" => "XYZ", :"password" => encrypt("ABC") } })
       u.username.should == "XYZ"
       u.password.should == "ABC"
     end
 
     it "should build a user from a hash with strings" do
-      u = User.new({ "username" => "XYZ", "password" => "ABC" })
+      u = User.new({ "username" => "XYZ", "password" => encrypt("ABC") })
       u.username.should == "XYZ"
       u.password.should == "ABC"
     end
 
     it "should build a user from an hash with symbols" do
-      u = User.new({ :"username" => "XYZ", :"password" => "ABC" })
+      u = User.new({ :"username" => "XYZ", :"password" => encrypt("ABC") })
       u.username.should == "XYZ"
       u.password.should == "ABC"
     end

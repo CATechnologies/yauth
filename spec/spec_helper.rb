@@ -13,6 +13,12 @@ Yauth.location = "tmp/config/users.yml"
 
 ROOT = Pathname.new(File.dirname(__FILE__))
 
+module EncryptorHelper
+  def encrypt(str)
+    BCrypt::Password.create(str).to_s.force_encoding("UTF-8")
+  end
+end
+
 RSpec.configure do |config|
-  
+  config.include(EncryptorHelper)
 end

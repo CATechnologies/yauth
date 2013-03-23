@@ -48,7 +48,7 @@ describe UserManager do
   end
 
   it "should save all its users to the specified file" do
-    first = User.new(:username => "first", :password => "123")
+    first = User.new(:username => "first", :password => encrypt("123"))
     second = User.new(:username => "second")
     second.plain_password = '456'
     subject.add(first)
@@ -57,20 +57,23 @@ describe UserManager do
     io = StringIO.new
     subject.should_receive(:open).with(yml_location, "w").and_yield(io)
     subject.save
-    io.string.should start_with <<-EOF.chop
+    io.string.should include(<<-EOF.chop % [["$2a$10$"]*2].flatten)
 ---
 - user:
     username: first
-    password: '123'
+    password: %s
+EOF
+    io.string.should include(<<-EOF.chop % [["$2a$10$"]*2].flatten)
 - user:
     username: second
-    password: $2a$10$
+    password: %s
 EOF
+
   end
 
   it "should find a user by its username" do
-    first = User.new(:username => "first", :password => "123") 
-    second = User.new(:username => "second", :password => "456") 
+    first = User.new(:username => "first", :password => encrypt("123"))
+    second = User.new(:username => "second", :password => encrypt("456"))
     subject.add(first)
     subject.add(second)
 
@@ -118,10 +121,10 @@ describe UserManager, "as a class" do
       io = StringIO.new <<-EOF
 - user:
     username: first
-    password: 123456
+    password: $2a$10$55XKSYQDwBRM2Thg33/kbe9ewF1N0EmCp0YB/8qTLzrEPFONXFyI6
 - user:
     username: second
-    password: 789012
+    password: $2a$10$hIOgKNo71iR/zIk5NBpAwufxUmCGqInndKszuvUoL9xg8OYr8yLYi
       EOF
       File.stub(:exists?).with(path).and_return(true)
       UserManager.should_receive(:open).with(path).and_yield(io)

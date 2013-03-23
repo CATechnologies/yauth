@@ -11,7 +11,8 @@ class Yauth::User
     hash = hash["user"] if hash["user"]
 
     self.username = hash[:username] || hash["username"]
-    self.password = hash[:password] || hash["password"]
+    _password = hash[:password] || hash["password"]
+    self.password = _password ? Password.new(_password) : _password
   end
 
   def plain_password=(plain_password)
