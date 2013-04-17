@@ -4,15 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{yauth}
-  s.version = "0.2.0"
+  s.name = "yauth"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Matteo Collina", "Saimon Moore"]
-  s.date = %q{2011-03-02}
-  s.default_executable = %q{yauth}
-  s.description = %q{Yauth is a extremely simple authentication solution for prototipes, developed as a warden strategy. It uses a yaml file to store usernames and hashed password. It provides a better-than-nothing security.}
-  s.email = %q{matteo@matteocollina.com}
+  s.date = "2013-04-17"
+  s.description = "Yauth is a extremely simple authentication solution for prototipes, developed as a warden strategy. It uses a yaml file to store usernames and hashed password. It provides a better-than-nothing security."
+  s.email = ["matteo@matteocollina.com", "saimonmoore@gmail.com"]
   s.executables = ["yauth"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
@@ -23,6 +22,8 @@ Gem::Specification.new do |s|
     ".document",
     ".rspec",
     ".rvmrc",
+    "Gemfile",
+    "Gemfile.lock",
     "LICENSE.txt",
     "README.rdoc",
     "Rakefile",
@@ -33,50 +34,55 @@ Gem::Specification.new do |s|
     "lib/yauth.rb",
     "lib/yauth/cli.rb",
     "lib/yauth/failure_app.rb",
+    "lib/yauth/strategies/basic.rb",
+    "lib/yauth/strategies/password.rb",
     "lib/yauth/strategy.rb",
     "lib/yauth/user.rb",
     "lib/yauth/user_manager.rb",
     "spec/spec_helper.rb",
     "spec/yauth/cli_spec.rb",
     "spec/yauth/failure_app_spec.rb",
-    "spec/yauth/strategy_spec.rb",
+    "spec/yauth/strategies/basic_spec.rb",
+    "spec/yauth/strategies/password_spec.rb",
     "spec/yauth/user_manager_spec.rb",
     "spec/yauth/user_spec.rb",
     "spec/yauth_spec.rb",
     "yauth.gemspec"
   ]
-  s.homepage = %q{http://github.com/mcollina/yauth}
+  s.homepage = "http://github.com/mcollina/yauth"
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.5.3}
-  s.summary = %q{A drop-in authentication solution for prototypes.}
-  s.test_files = [
-    "examples/sinatra/app.rb",
-    "spec/spec_helper.rb",
-    "spec/yauth/cli_spec.rb",
-    "spec/yauth/failure_app_spec.rb",
-    "spec/yauth/strategy_spec.rb",
-    "spec/yauth/user_manager_spec.rb",
-    "spec/yauth/user_spec.rb",
-    "spec/yauth_spec.rb"
-  ]
+  s.rubygems_version = "1.8.23"
+  s.summary = "A drop-in authentication solution for prototypes."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
+      s.add_runtime_dependency(%q<yauth>, [">= 0"])
       s.add_runtime_dependency(%q<bcrypt-ruby>, [">= 2.1.4"])
       s.add_runtime_dependency(%q<warden>, ["~> 1.0"])
-      s.add_runtime_dependency(%q<thor>, ["~> 0.17.0"])
+      s.add_runtime_dependency(%q<thor>, ["~> 0.14.0"])
+      s.add_development_dependency(%q<test_notifier>, ["~> 0.3.6"])
+      s.add_development_dependency(%q<autotest>, ["~> 4.4"])
+      s.add_development_dependency(%q<rcov>, [">= 0"])
     else
+      s.add_dependency(%q<yauth>, [">= 0"])
       s.add_dependency(%q<bcrypt-ruby>, [">= 2.1.4"])
       s.add_dependency(%q<warden>, ["~> 1.0"])
-      s.add_dependency(%q<thor>, ["~> 0.17.0"])
+      s.add_dependency(%q<thor>, ["~> 0.14.0"])
+      s.add_dependency(%q<test_notifier>, ["~> 0.3.6"])
+      s.add_dependency(%q<autotest>, ["~> 4.4"])
+      s.add_dependency(%q<rcov>, [">= 0"])
     end
   else
+    s.add_dependency(%q<yauth>, [">= 0"])
     s.add_dependency(%q<bcrypt-ruby>, [">= 2.1.4"])
     s.add_dependency(%q<warden>, ["~> 1.0"])
-    s.add_dependency(%q<thor>, ["~> 0.17.0"])
+    s.add_dependency(%q<thor>, ["~> 0.14.0"])
+    s.add_dependency(%q<test_notifier>, ["~> 0.3.6"])
+    s.add_dependency(%q<autotest>, ["~> 4.4"])
+    s.add_dependency(%q<rcov>, [">= 0"])
   end
 end
 
