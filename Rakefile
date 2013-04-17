@@ -4,7 +4,9 @@ require 'rake'
 require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
+  version = File.exist?('VERSION') ? File.read('VERSION') : ""
   gem.name = "yauth"
+  gem.version = version
   gem.homepage = "http://github.com/mcollina/yauth"
   gem.license = "MIT"
   gem.summary = %Q{A drop-in authentication solution for prototypes.}
