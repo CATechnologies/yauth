@@ -26,7 +26,7 @@ describe CLI do
     end
 
     it "should delegate adding a user to the manager with the specified config" do
-      UserManager.should_receive(:add).with(instance_of(Pathname), "bar", "foo")
+      UserManager.should_receive(:add).with("bar", "foo", instance_of(Pathname))
       subject.add("bar", "foo")
     end
   end
@@ -42,7 +42,7 @@ describe CLI do
     end
 
     it "should delagate removing a user to the manager with the specified config" do
-      UserManager.should_receive(:remove).with(instance_of(Pathname), "bar")
+      UserManager.should_receive(:remove).with("bar", instance_of(Pathname))
 
       subject.rm("bar")
     end

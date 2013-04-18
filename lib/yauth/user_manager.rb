@@ -19,7 +19,7 @@ class Yauth::UserManager
     end
   end
 
-  def self.add(config_base_path, username, password)
+  def self.add(username, password, config_base_path=Pathname.new('.'))
     #TODO: Move into user initializer
     user = Yauth::User.new
     user.username = username
@@ -29,13 +29,18 @@ class Yauth::UserManager
     @manager.save
   end
 
-  def self.remove(config_base_path, username)
+  def self.remove(username, config_base_path=Pathname.new('.'))
     @manager = self.instance(config_base_path)
     @manager.remove(username)
     @manager.save
   end
 
-  def self.instance(config_base_path)
+  def self.first(config_base_path=Pathname.new('.'))
+    @manager = self.instance(config_base_path)
+    @manager.first
+  end
+
+  def self.instance(config_base_path=Pathname.new('.'))
     @manager = Yauth::UserManager.load(config_base_path + Yauth.location)
   end
 

@@ -101,6 +101,14 @@ EOF
     subject.should_receive(:find_by_username).with("name").and_return(nil)
     subject.authenticate("name", "password").should be_false
   end
+
+  it "should be able to return the first user" do 
+    first = mock_user "first"
+    second = mock_user "second"
+    subject.add first
+    subject.add second
+    subject.first.should == first
+  end
 end
 
 describe UserManager, "as a class" do
@@ -160,7 +168,7 @@ describe UserManager, "as a class" do
 
       manager.should_receive(:add).with(user)
       manager.should_receive(:save)
-      subject.add(base_path, "bar", "foo")
+      subject.add("bar", "foo", base_path)
     end
   end
 
@@ -173,7 +181,7 @@ describe UserManager, "as a class" do
       manager.should_receive(:remove).with("bar")
       manager.should_receive(:save)
 
-      subject.remove(base_path, "bar")
+      subject.remove("bar", base_path)
     end
   end
 
@@ -184,6 +192,18 @@ describe UserManager, "as a class" do
       UserManager.should_receive(:load).with(base_path + Yauth.location).and_return(manager)
 
       subject.instance(base_path)
+    end
+  end
+
+  it { should respond_to(:first) }
+  describe "#first" do
+    it "should return the first user from the specified config" do
+      manager = mock "Manager"
+
+      UserManager.should_receive(:instance).with(base_path).and_return(manager)
+      manager.should_receive(:first)
+
+      subject.first(base_path)
     end
   end
 
