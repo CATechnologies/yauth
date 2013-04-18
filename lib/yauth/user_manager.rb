@@ -52,6 +52,10 @@ class Yauth::UserManager
     @list.each(&block)
   end
 
+  def first
+    @list.first
+  end
+
   def save
     open(@path, "w") do |io|
       io << @list.to_yaml
