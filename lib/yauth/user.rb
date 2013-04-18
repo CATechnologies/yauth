@@ -32,4 +32,27 @@ class Yauth::User
     return false if password.to_s == "" 
     self.password == password
   end
+
+  ###
+  #
+  # RailsWarden compatibility
+  #
+
+  def to_param
+    self.username
+  end
+
+  def id
+    self.to_param
+  end
+
+  def self.find(username)
+    manager.find_by_username(username)
+  end
+
+  private
+
+  def self.manager
+    @manager ||= Yauth::UserManager.load(Yauth.location)
+  end
 end
