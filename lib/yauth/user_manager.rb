@@ -40,6 +40,11 @@ class Yauth::UserManager
     @manager.first
   end
 
+  def self.find_by_username(username, config_base_path=Pathname.new('.'))
+    @manager = self.instance(config_base_path)
+    @manager.find_by_username(username)
+  end
+
   def self.instance(config_base_path=Pathname.new('.'))
     @manager = Yauth::UserManager.load(config_base_path + Yauth.location)
   end

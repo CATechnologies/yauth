@@ -207,4 +207,16 @@ describe UserManager, "as a class" do
     end
   end
 
+  it { should respond_to(:find_by_username) }
+  describe "#find_by_username" do
+    it "should find a user by username from the specified config" do
+      manager = mock "Manager"
+
+      UserManager.should_receive(:instance).with(base_path).and_return(manager)
+      manager.should_receive(:find_by_username).with('jack')
+
+      subject.find_by_username('jack', base_path)
+    end
+  end
+
 end
