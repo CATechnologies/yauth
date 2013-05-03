@@ -53,6 +53,6 @@ class Yauth::User
   private
 
   def self.manager
-    @manager ||= Yauth::UserManager.load(Yauth.location)
+    @manager = Yauth::UserManager.load(Yauth.location)
   end
 end
